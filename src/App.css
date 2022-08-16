@@ -1,38 +1,60 @@
 .App {
   text-align: center;
+  padding: 0;
+  margin: 0;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.upload{
+  background-color: rgb(144, 165, 235);
+  padding: 10px;
+  color: rgb(62, 32, 197);
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.getData{
+  background-color: rgb(144, 165, 235);
+  padding: 10px;
+  color: rgb(62, 32, 197);
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+h1{
+  color: aliceblue;
+  padding: 20px;
+  background-color: rgb(80, 111, 224);
+}
+.changeToExcel{
+  padding: 20px;
+  background-color: rgb(80, 111, 224);
+}
+li{
+  margin-left: 30px;
+  margin-top: 5px;
+  list-style: none;
+  text-align: left;
+}
+label{
+  color: antiquewhite;
+  margin-right: 10px;
+}
+button{
+  padding: 5px;
+  margin: 10px;
+  background-color: rgb(58, 156, 222);
+  border:rgb(64, 92, 183) solid 3px;
+  cursor: pointer;
   color: white;
 }
-
-.App-link {
-  color: #61dafb;
+button:hover{
+  background-color: rgb(50, 132, 187);
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.uploadFile{
+  background-color: rgb(58, 156, 222);
+  color: black;
+  cursor: pointer;
+  padding: 7px;
+  border:rgb(70, 104, 212) solid 3px;
+  color: white;
+}
+.uploadFile:hover{
+  background-color: rgb(50, 132, 187);
+}
+input[type="file"] {
+  display: none;
 }
