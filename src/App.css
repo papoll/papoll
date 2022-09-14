@@ -15,11 +15,11 @@
   color: rgb(62, 32, 197);
 }
 h1{
-  color: aliceblue;
+  color: rgb(16, 2, 37);
   padding: 20px;
-  background-color: rgb(80, 111, 224);
+  
 }
-.changeToExcel{
+.overview{
   padding: 20px;
   background-color: rgb(80, 111, 224);
 }
