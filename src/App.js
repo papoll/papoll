@@ -14,7 +14,8 @@ function App() {
   const [getfinish,setGetFinish] = useState(Boolean);//是否全部獲取完畢
   const [tagfinish,setTagFinish] = useState(Boolean);//是否全部獲取完畢
   const [encodeID, setEncodeID] = useState([])//encodeID
-  const [tagName, setTagName] = useState("");
+  const [tagLine, setTagLine] = useState("");
+  const [tagName, setTagName] = useState([]);
   const [tagid, setTagID] = useState([]);
   //處理文件上傳(excel檔)
   const handleFile = async (e) =>{
@@ -32,10 +33,14 @@ function App() {
     for(let i = 1; i < jsonData.length; i++){
       setOldUrl(data=>[...data,jsonData[i][0]]);
     }
+
+    for(let i = 1; i < jsonData.length; i++){
+      setTagName(data=>[...data,jsonData[i][1]])
+    }
   }
   //
   const changeToken = ()=>{
-    console.log(token);
+    console.log(token); 
     setGetDataURL("https://api.pics.ee/v1/links/?access_token="+ token);
   }
   //得到縮短的網址
@@ -54,26 +59,34 @@ function App() {
       setNewUrl(data=>[...data,dataUrl]);
       console.log(Data);
     }
-    
-    
     setGetFinish(true);
   }
   //
+  
   const addTag = async () =>{
-    for(let i = 0; i < encodeID.length; i++){
-      let Data = await Axios.post(`https://api.pics.ee/v1/links/`+encodeID[i]+`/tags?access_token=` + token,
-      {"value": tagName
-      }
-      );
-      console.log(encodeID[i]);
-      console.log(Data);
-      let tagID = Data.data.data.id;
-      console.log(tagID);
-      setTagID(data=>[...data, tagID]);
-      console.log(tagName);
+    setTagFinish(false);
+    let tagtem = parseInt(tagLine);
+    //console.log(tagtem);
+    // console.log(typeof(tagtem));
+    let tagnum = tagtem - 1;
+    let tagID;
+    for(let i = 0; i < oldUrl.length; i++){
+      //console.log(i);
+      let tag = tagName[i].split("/");
+      console.log(tagName[i]);
+      console.log(tag[tagnum]);
+      if(tag[tagnum]!== "*"){
+        let Data = await Axios.post(`https://api.pics.ee/v1/links/`+encodeID[i]+`/tags?access_token=` + token,
+        {"value": tag[tagnum]}
+        );
+        console.log(encodeID[i]);
+        console.log(Data);
+        tagID = Data.data.data.id;
+      } 
     }
-
+    setTagID(data=>[...data, tagID]);
     setTagFinish(true);
+
   }
   
 
@@ -83,9 +96,11 @@ function App() {
     const workbook = new ExcelJs.Workbook(); // 創建試算表檔案
     const sheet = workbook.addWorksheet('工作表範例1'); //在檔案中新增工作表 參數放自訂名稱
     let row = [];
+   
     for(let i = 0; i < oldUrl.length; i++){
-      row.push([oldUrl[i],newUrl[i],tagName,tagid[i]]);
+      row.push([oldUrl[i],newUrl[i],tagName[i],tagid]);
     }
+
     console.log(row);
 		sheet.addTable({ // 在工作表裡面指定位置、格式並用columsn與rows屬性填寫內容
 	    name: 'table名稱',  // 表格內看不到的，讓你之後想要針對這個table去做額外設定的時候，可以指定到這個table
@@ -96,6 +111,8 @@ function App() {
     //改變表格樣式
     sheet.getColumn(1).width = 90;
     sheet.getColumn(2).width = 50;
+    sheet.getColumn(3).width = 50;
+    sheet.getColumn(4).width = 80;
 
     // 表格裡面的資料都填寫完成之後，訂出下載的callback function
 		// 異步的等待他處理完之後，創建url與連結，觸發下載
@@ -134,7 +151,8 @@ function App() {
         {getfinish ? "GetData": "Dataloading"}
         <div>
         <button onClick={(e)=>addTag()}>getTag</button> 
-          <input type="text" placeholder="tagName" onChange={(e)=>setTagName(e.target.value)}/>
+          <input type="number" placeholder="tag" onChange={(e)=>setTagLine(e.target.value)}/>
+           {/* {tagName.map(item=><li>{item}</li>)} */}
           {tagfinish ? "AddTag": "Tagloading"}
         </div>
       </div>
