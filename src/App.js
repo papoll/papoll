@@ -17,6 +17,7 @@ function App() {
   const [tagLine, setTagLine] = useState("");
   const [tagName, setTagName] = useState([]);
   const [tagid, setTagID] = useState([]);
+  const [use,setUse] = useState([]);
   //處理文件上傳(excel檔)
   const handleFile = async (e) =>{
     const file = e.target.files[0];
@@ -52,9 +53,10 @@ function App() {
         "applyDomain": true,
       });
       let dataUrl = Data.data.data.picseeUrl;
+      let dataUse = Data.data.meta.requestCount;
+      setUse(data=>[...data,dataUse]);
       let encode = dataUrl.split("/");
       console.log(encode[3]);
-
       setEncodeID(data=>[...data, encode[3]]);
       setNewUrl(data=>[...data,dataUrl]);
       console.log(Data);
@@ -98,14 +100,14 @@ function App() {
     let row = [];
    
     for(let i = 0; i < oldUrl.length; i++){
-      row.push([oldUrl[i],newUrl[i],tagName[i],tagid]);
+      row.push([oldUrl[i],newUrl[i],tagName[i],tagid,use[i]]);
     }
 
     console.log(row);
 		sheet.addTable({ // 在工作表裡面指定位置、格式並用columsn與rows屬性填寫內容
 	    name: 'table名稱',  // 表格內看不到的，讓你之後想要針對這個table去做額外設定的時候，可以指定到這個table
 	    ref: 'A1', // 從A1開始
-	    columns: [{name:'原本的網址'},{name:'新的網址'},{name:'tagName'},{name: 'tagID'}],
+	    columns: [{name:'原本的網址'},{name:'新的網址'},{name:'tagName'},{name: 'tagID'},{name: '使用次數'}],
 	    rows: row
 		});
     //改變表格樣式
